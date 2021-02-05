@@ -1,9 +1,39 @@
+import random
 
 letras_utilizadas = ''
 letras_corretas = ''
 qtd = 0
 x=0
 underline = []
+
+def gera_palavra():
+    palavras = {1: [], 2: [], 3: []}
+
+    with open('palavras.txt', 'r', encoding='utf-8') as arquivo:
+        for linha in arquivo:
+            linha = linha.strip()
+            if (len(linha) <= 5):
+                palavras[1].append(linha)
+            elif (len(linha) > 5 and len(linha) < 10):
+                palavras[2].append(linha)
+            else:
+                palavras[3].append(linha)
+
+    nivel = int(input('Escolha um nível: 1-Fácil, 2-Médio, 3-Difícil -> '))
+
+    posicao = 0
+
+    if (nivel == 1):
+        posicao = random.randrange(0, len(palavras.get(1)))
+        palavra_secreta = palavras.get(1)[posicao]
+    elif (nivel == 2):
+        posicao = random.randrange(0, len(palavras.get(2)))
+        palavra_secreta = palavras.get(2)[posicao]
+    else:
+        posicao = random.randrange(0, len(palavras.get(3)))
+        palavra_secreta = palavras.get(3)[posicao]
+
+    return palavra_secreta.upper()
 
 def utilizadas(chute):
     for letra in list(letras_utilizadas):
@@ -38,7 +68,7 @@ def jogar():
     print("***Bem vindo ao jogo da Forca!***")
     print("*********************************")
 
-    palavra_secreta = 'Python'.upper()
+    palavra_secreta = gera_palavra()
 
     for x in palavra_secreta:
         underline.append('_ ')
@@ -64,7 +94,7 @@ def jogar():
 
         print(' '.join(underline))
 
-        if(erros >= 5):
+        if(erros >= len(palavra_secreta)+5):
             print('Você perdeu, a palavra era', palavra_secreta)
             break
         elif(len(palavra_secreta) == qtd_correta ):
